@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class MyExceptionHandler {
 
-//more exceptions should be here
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> error(Exception e){
         return new ResponseEntity<>("An error occurred: "+e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
