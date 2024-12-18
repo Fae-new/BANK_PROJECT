@@ -10,7 +10,6 @@ public class Account {
     private String accountId;
 
 
-
     @Column(unique = true, nullable = false)
     private String accountName;
 
@@ -27,7 +26,7 @@ public class Account {
     @Column(nullable = false)
     private AccountType accountType;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(mappedBy = "account",cascade = CascadeType.ALL)
     private MyUser user;
 
 

@@ -20,6 +20,7 @@ public class AuthController {
         this.userService = userService;
     }
 
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody MyUser user) {
         try {

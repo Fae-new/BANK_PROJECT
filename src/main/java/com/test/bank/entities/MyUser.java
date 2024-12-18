@@ -1,9 +1,15 @@
 package com.test.bank.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -11,23 +17,27 @@ import java.util.List;
 public class MyUser implements UserDetails {
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true,nullable = false)
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Email should be valid")
    private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false )
+    @NotNull(message = "Password cannot be null")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
    private String password;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "account_id")
     private Account account;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

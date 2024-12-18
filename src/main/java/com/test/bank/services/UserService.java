@@ -6,6 +6,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,6 +15,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private final PasswordEncoder encoder= new BCryptPasswordEncoder(10);
     private final JwtService jwtService;
     private final  MyUserDetailsService myUserDetailsService;
     private final AuthenticationManager authenticationManager;
@@ -29,6 +32,7 @@ public class UserService {
         this.jwtService=jwtService;
     }
     public void addUser(MyUser user) {
+        user.setPassword(encoder.encode(user.getPassword()));
      repository.save(user);
     }
 

@@ -106,7 +106,7 @@ public class AccountService {
         account.setAccountBalance(0L); // Initial balance
         account.setUser(user);
         account.setAccountType(accountType);
-
+user.setAccount(account);
         accountRepository.save(account);
 
         return "Account created successfully. Account Number: " + accountNumber;

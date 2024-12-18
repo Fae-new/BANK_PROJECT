@@ -1,7 +1,6 @@
 package com.test.bank.services;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -51,7 +50,8 @@ public class JwtService {
     public Boolean isTokenValid(String token, UserDetails userDetails){
 
         final String username= getUsername(token);
-        return (username.equals(userDetails.getUsername())) && isTokenExpired(token);
+
+        return (username.equals(userDetails.getUsername())) ;
     }
 
     private boolean isTokenExpired(String token) {
