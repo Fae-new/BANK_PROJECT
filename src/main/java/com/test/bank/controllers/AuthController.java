@@ -2,6 +2,7 @@ package com.test.bank.controllers;
 
 import com.test.bank.entities.MyUser;
 import com.test.bank.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody MyUser user) {
+    public ResponseEntity<String> register( @Valid @RequestBody MyUser user) {
         try {
             userService.addUser(user);
             return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
@@ -32,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody MyUser user) {
+    public ResponseEntity<Map<String, String>> login( @Valid @RequestBody MyUser user) {
         try {
             Optional<String> res = userService.verify(user);
             Map<String, String> response = new HashMap<>();
