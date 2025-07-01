@@ -1,4 +1,4 @@
-package com.test.bank.config.filters;
+package com.test.bank.security.filters;
 
 import com.test.bank.services.JwtService;
 import com.test.bank.services.MyUserDetailsService;

@@ -1,9 +1,10 @@
 package com.test.bank.config;
 
-import com.test.bank.config.filters.JwtFilter;
+import com.test.bank.security.filters.JwtFilter;
 import com.test.bank.services.MyUserDetailsService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,18 +18,30 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
     private final MyUserDetailsService userDetailsService;
     private final JwtFilter jwtFilter;
 
-    public SecurityConfig(MyUserDetailsService myUserDetailsService, JwtFilter jwtFilter) {
-       this.userDetailsService = myUserDetailsService;
-        this.jwtFilter = jwtFilter;
-    }
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+//        http.formLogin(AbstractHttpConfigurer::disable)
+//                .sessionManagement(customizer->customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(requests->requests.requestMatchers("/","/auth/login","/auth/register").permitAll()
+//                        .anyRequest().authenticated())
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .httpBasic(Customizer.withDefaults())
+//               // .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+//                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutUrl("/logout")
+//                        .logoutSuccessHandler((request, response, authentication) -> {
+//                    response.setStatus(HttpServletResponse.SC_OK);
+//                    response.getWriter().write("Logout successful");
+//                }));
+//        return http.build();
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -38,12 +51,12 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                // .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    response.getWriter().write("Logout successful");
-                }));
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.getWriter().write("Logout successful");
+                        }));
         return http.build();
     }
 @Bean

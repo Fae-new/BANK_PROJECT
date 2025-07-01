@@ -5,20 +5,35 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.annotation.Validated;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.List;
 
+
+@Setter
 @Entity
-public class MyUser implements UserDetails {
+@Getter
+@ToString
+public class MyUser {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
+
+
+
+    @Column(nullable = false)
+    @NotBlank(message = "First name cannot be blank")
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
 
     @Column(unique = true,nullable = false)
     @NotBlank(message = "Email cannot be blank")
@@ -27,54 +42,17 @@ public class MyUser implements UserDetails {
 
     @Column(nullable = false )
     @NotNull(message = "Password cannot be null")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
    private String password;
 
-    @OneToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Wallet> wallets =new ArrayList<>();
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles=new ArrayList<>();
 
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
+    public String getFullName() {
+        return this.firstName +" "+ this.lastName;
     }
 }

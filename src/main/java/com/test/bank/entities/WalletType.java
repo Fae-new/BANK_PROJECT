@@ -1,6 +1,6 @@
 package com.test.bank.entities;
 
-public enum AccountType {
+public enum WalletType {
     SAVINGS,
     CURRENT
 }

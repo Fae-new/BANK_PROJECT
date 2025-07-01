@@ -1,7 +1,9 @@
 package com.test.bank.services;
 
+import com.test.bank.entities.Dtos.UserDto;
 import com.test.bank.entities.MyUser;
 import com.test.bank.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final PasswordEncoder encoder= new BCryptPasswordEncoder(10);
@@ -22,18 +25,23 @@ public class UserService {
     private final UserRepository repository;
 
 
-    public UserService(MyUserDetailsService myUserDetailsService,
-                       AuthenticationManager authenticationManager,
-                       JwtService jwtService,
-                       UserRepository repository){
-        this.repository=repository;
-        this.myUserDetailsService=myUserDetailsService;
-        this.authenticationManager=authenticationManager;
-        this.jwtService=jwtService;
+
+
+    public UserDto convertToUserDto(MyUser user){
+        return  new UserDto(user.getId(), user.getFirstName(),user.getLastName(),user.getEmail());
     }
+
+
+
     public void addUser(MyUser user) {
         user.setPassword(encoder.encode(user.getPassword()));
      repository.save(user);
+    }
+    public void saveUser(MyUser user) {
+        repository.save(user);
+    }
+    public Optional<MyUser> findUserById(int id) {
+        return repository.findById(id);
     }
 
     public Optional<String> verify(MyUser user) {
